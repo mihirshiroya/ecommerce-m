@@ -18,101 +18,85 @@ export default function UserOrders() {
   }, [dispatch]);
 
   return (
-    <div>
+    <div className='flex flex-col gap-3'>
       {orders && orders.map((order) => (
-        <div key={order.id}>
-          <div>
-            <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
-              <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">
-                  Order # {order.id}
-                </h1>
-                <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
-                  Order Status : {order.status}
-                </h3>
-                <div className="flow-root">
-                  <ul className="-my-6 divide-y divide-gray-200">
-                    {order.items.map((item) => (
-                      <li key={item.id} className="flex py-6">
-                        <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                          <img
-                            src={item.product.thumbnail}
-                            alt={item.product.title}
-                            className="h-full w-full object-cover object-center"
-                          />
-                        </div>
 
-                        <div className="ml-4 flex flex-1 flex-col">
-                          <div>
-                            <div className="flex justify-between text-base font-medium text-gray-900">
-                              <h3>
-                                <a href={item.product.id}>{item.product.title}</a>
-                              </h3>
-                              <p className="ml-4">${Math.round(item.product.price*(1-item.product.discountPercentage/100))}</p>
-                            </div>
-                            <p className="mt-1 text-sm text-gray-500">
-                              {item.product.brand}
-                            </p>
-                          </div>
-                          <div className="flex flex-1 items-end justify-between text-sm">
-                            <div className="text-gray-500">
-                              <label
-                                htmlFor="quantity"
-                                className="inline mr-5 text-sm font-medium leading-6 text-gray-900"
-                              >
-                                Qty :{item.quantity}
-                              </label>
-                            </div>
-
-                            <div className="flex"></div>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                <div className="flex justify-between my-2 text-base font-medium text-gray-900">
-                  <p>Subtotal</p>
-                  <p>$ {order.totalAmount}</p>
-                </div>
-                <div className="flex justify-between my-2 text-base font-medium text-gray-900">
-                  <p>Total Items in Cart</p>
-                  <p>{order.totalItems} items</p>
-                </div>
-                <p className="mt-0.5 text-sm text-gray-500">
-                  Shipping Address :
-                </p>
-                <div className="flex justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200">
-                  <div className="flex gap-x-4">
-                    <div className="min-w-0 flex-auto">
-                      <p className="text-sm font-semibold leading-6 text-gray-900">
-                        {order.selectedAddress.name}
+<div key={order.id} className="w-full max-w-4xl mx-auto bg-white mb-5 shadow-lg rounded-lg overflow-hidden">
+        <div className="p-4 sm:p-6 border-b">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg sm:text-xl font-semibold">
+                Order #{order.id}
+              </h2>
+              <span className="inline-flex items-center px-3 py-1 text-xs sm:text-sm bg-green-100 text-green-800 rounded-full">
+                {order.status}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="p-4 sm:p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <h3 className="font-semibold text-base sm:text-lg border-b pb-2">Order Items</h3>
+              {order.items.map((item, index) => (
+                <div key={index} className="flex items-start space-x-4 hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                  <img
+                    src={item.product.thumbnail}
+                    alt={item.product.title || 'Product image'}
+                    className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+                  />
+                  <div className="flex-grow space-y-1">
+                    <h3 className="font-semibold text-sm sm:text-base">{item.product.title}</h3>
+                    <p className="text-xs sm:text-sm text-gray-500">{item.product.brand}</p>
+                    <div className="flex justify-between items-center mt-2">
+                      <p className="font-medium text-sm sm:text-base">
+                        ${Math.round(item.product.price * (1 - item.product.discountPercentage / 100))}
                       </p>
-                      <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                        {order.selectedAddress.street}
-                      </p>
-                      <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                        {order.selectedAddress.pinCode}
+                      <p className="text-xs sm:text-sm font-medium bg-gray-100 px-2 py-1 rounded">
+                        Qty: {item.quantity}
                       </p>
                     </div>
                   </div>
-                  <div className="hidden sm:flex sm:flex-col sm:items-end">
-                    <p className="text-sm leading-6 text-gray-900">
-                      Phone: {order.selectedAddress.phone}
-                    </p>
-                    <p className="text-sm leading-6 text-gray-500">
-                      {order.selectedAddress.city}
-                    </p>
+                </div>
+              ))}
+              {order.items.length === 0 && (
+                <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-lg">
+                  <p>No items in this order</p>
+                </div>
+              )}
+            </div>
+            <div className="space-y-8">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-base sm:text-lg mb-4">Order Summary</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm sm:text-base">
+                    <span className="text-gray-600">Subtotal</span>
+                    <span className="font-medium">${order.totalAmount}</span>
+                  </div>
+                  <div className="flex justify-between text-sm sm:text-base">
+                    <span className="text-gray-600">Total Items</span>
+                    <span className="font-medium">{order.totalItems}</span>
                   </div>
                 </div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-base sm:text-lg mb-4">Shipping Address</h3>
+                <address className="not-italic text-sm sm:text-base space-y-1 text-gray-600">
+                  <p className="font-medium text-gray-900">{order.selectedAddress.name}</p>
+                  <p>{order.selectedAddress.street}</p>
+                  <p>{order.selectedAddress.city}, {order.selectedAddress.pinCode}</p>
+                  <p>Phone: {order.selectedAddress.phone}</p>
+                </address>
               </div>
             </div>
           </div>
         </div>
+      </div>
+
+
+        
       ))}
+     
        {status === 'loading' ? (
         <Grid
           height="80"
@@ -124,6 +108,7 @@ export default function UserOrders() {
           wrapperClass=""
           visible={true}
         />
+      
       ) : null}
     </div>
   );
