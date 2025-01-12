@@ -77,9 +77,9 @@ exports.resetPasswordRequest = async (req, res) => {
     user.resetPasswordToken = token;
     await user.save();
 
-    // Also set token in email
+    // Also set token in email 
     const resetPageLink =
-      '/reset-password?token=' + token + '&email=' + email;
+      'https://ecommerce-m-2.onrender.com/reset-password?token=' + token + '&email=' + email;
     const subject = 'reset password for e-commerce';
     const html = `<p>Click <a href='${resetPageLink}'>here</a> to Reset Password</p>`;
 
